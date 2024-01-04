@@ -1,3 +1,43 @@
+// import {app, BrowserWindow } from 'electron';
+
+// class Main {
+//   private mainWindow: BrowserWindow;
+
+//   public init() {
+//     app.on('ready', this.createWindow);
+//     app.on('window-all-closed', this.onWindowAllClosed);
+//     app.on('activate', this.onActivate);
+//   }
+
+//   private onWindowAllClosed() {
+//     if (process.platform !== 'darwin') {
+//       app.quit();
+//     }
+//   }
+
+//   private onActivate() {
+//     if (!this.mainWindow) {
+//       this.createWindow();
+//     }
+//   }
+
+//   private createWindow() {
+//     this.mainWindow = new BrowserWindow({
+//       title: "Tax Receipt App",
+//       webPreferences: {
+//         nodeIntegration: true // makes it possible to use `require` within our index.html
+//       },
+//       fullscreen: true 
+//     });
+
+//     this.mainWindow.webContents.openDevTools();
+//     this.mainWindow.loadFile('./../../index.html');
+//   }
+// }
+
+// // Here we go!
+// (new Main()).init();
+
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 
@@ -9,8 +49,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    fullscreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
