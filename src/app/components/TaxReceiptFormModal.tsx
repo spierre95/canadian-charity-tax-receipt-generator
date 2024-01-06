@@ -1,102 +1,86 @@
 import React from "react";
-import { Datepicker, Modal} from "flowbite-react";
+import { Datepicker, Modal } from "flowbite-react";
+import { useForm } from "react-hook-form";
+
+import Input from "./Input";
+
+type FormData = {
+  donorFirstName: string;
+  donorLastName: string;
+  donorIntial: string;
+  donorAddress: string;
+  giftAmount: number;
+  eligibleAmount: number;
+  dateReceived: Date;
+  giftDescription: string;
+};
 
 const TaxReceiptFormModal = ({ showModal, setShowModal }) => {
+  const { register, handleSubmit, setValue } = useForm<FormData>();
+  const onSubmit = (data) => console.log(data);
   return (
     <Modal show={showModal} size="4xl" onClose={() => setShowModal(false)}>
       <Modal.Header>Generate tax Receipt</Modal.Header>
 
       <Modal.Body>
-        <form className="flex flex-col mx-auto max-w-screen-2xl">
+        <form
+          className="flex flex-col mx-auto max-w-screen-2xl"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <h2 className="font-bold text-lg my-5">Donor Information</h2>
           <div className="flex justify-center ">
             <div className="basis-5/12 mx-1 mb-5">
-              <label
-                htmlFor="firstName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                First Name
-              </label>
-              <input
+              <Input
+                label="First Name"
                 type="text"
-                id="firstName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="John"
-                required
+                register={register}
+                id="donorFirstName"
               />
             </div>
             <div className="basis-2/12 mx-1 mb-5">
-              <label
-                htmlFor="middleInitial"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Middle Initial
-              </label>
-              <input
+              <Input
+                label="Initial"
                 type="text"
-                id="middleInitial"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
+                register={register}
+                id="donorInitial"
               />
             </div>
             <div className="basis-5/12 mx-1 mb-5">
-              <label
-                htmlFor="lastName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Last Name
-              </label>
-              <input
+              <Input
+                label="Last Name"
                 type="text"
-                id="lastName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Doe"
-                required
+                register={register}
+                id="donorLastName"
               />
             </div>
           </div>
           <div className="flex  justify-center">
-            <div className="basis-full">
-              <label
-                htmlFor="address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Address
-              </label>
-              <textarea
-                id="address"
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              ></textarea>
+            <div className="mx-1 basis-full">
+              {/* TODO: make date into separate feilds and add google autocomplete */}
+              <Input
+                label="Address"
+                type="text"
+                register={register}
+                id="donorAddress"
+              />
             </div>
           </div>
           <h2 className="font-bold text-lg mt-10 mb-5">Gift Information</h2>
           <div className="flex ">
             <div className="basis-2/6 mx-1 mb-5">
-              <label
-                htmlFor="giftAmount"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Gift Amount
-              </label>
-              <input
+              <Input
+                label="Gift Amount"
                 type="number"
+                register={register}
                 id="giftAmount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
               />
             </div>
             <div className="mb-5 mx-1 basis-2/6">
-              <label
-                htmlFor="eligibleAmount"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Eligible Amount
-              </label>
-              <input
+              <Input
+                label="Eligible Gift Amount"
                 type="number"
+                register={register}
                 id="eligibleAmount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
               />
             </div>
 
@@ -107,20 +91,18 @@ const TaxReceiptFormModal = ({ showModal, setShowModal }) => {
               >
                 Date Received
               </label>
-              <Datepicker />
+              <Datepicker
+                onSelectedDateChanged={(date) => setValue("dateReceived", date)}
+              />
             </div>
           </div>
-          <div className="mb-5 ">
-            <label
-              htmlFor="description"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Gift Description
-            </label>
-            <textarea
-              id="description"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            ></textarea>
+          <div className="mb-5 mx-1">
+            <Input
+              label="Gift Description"
+              type="text"
+              register={register}
+              id="giftDescription"
+            />
           </div>
 
           <button
